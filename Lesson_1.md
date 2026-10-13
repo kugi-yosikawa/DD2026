@@ -101,70 +101,86 @@ import xarray as xr # xarray ライブラリ（配列処理ライブラリ）を
 
 # read MOAA GPV data
 file='MOAAv2_OI_TS_20240115_MON_100deg_5-2000db.nc'
-nc = xr.open_dataset(file) # file を nc という名前で読み込む
+nc = xr.open_dataset(file) # file を nc という名のオブジェクトとして保存
 
-date = nc['CDATE0']
-dtyp = nc['DATASET_TYPE']
-lat = nc['LATITUDE'][:]
-lon = nc['LONGITUDE'][:]
-prs = nc['PRES'][:]
-toi = nc['TOI'][:]
-soi = nc['SOI'][:]
-nc.close()
+date = nc['CDATE0'] # nc の CDARE0 とラベルづけされたデータ（解析日時を記した文字）を date という名の変数として保存
+dtyp = nc['DATASET_TYPE'] # nc の DATASET_TYPE とラベルづけされたデータ（モード種別）を dtyp とい名の変数として保存
+lat = nc['LATITUDE'][:] # nc の LATITUDE とラベルづけされたデータ（緯度配列）を lat とい名の変数として保存
+lon = nc['LONGITUDE'][:] # nc の LONGITUDE とラベルづけされたデータ（経度配列）を lon とい名の変数として保存
+prs = nc['PRES'][:] # nc の PRES とラベルづけされたデータ（圧力）を prs という名の変数として保存
+toi = nc['TOI'][:] # nc の TOI とラベルづけされたデータ（水温）を toi という名の変数として保存
+soi = nc['SOI'][:] # nc の SOI とラベルづけされたデータ（塩分）を soi という名の変数として保存
+nc.close() # nc オブジェクトを閉じる
 ```
 
 なお、fortran形式の配列格納順に慣れている人（私など）は以下のように転置しておくと良い。
 
 ```
 # transpose (pres,lat,lon) (C style) -> (lon,lat,pres) (F style)
-toi = toi.T
+toi = toi.T # ".T" で転置
 soi = soi.T
 ```
 
 ## MOAA GPV データの描画
-例えば最浅層の水温を描画するには以下のようにすれば良い（１例）。
+例えば最浅層の水温を描画するには以下のようにすれば良い（例）。
 
 ```
 import numpy as np
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt # matplotlib.pyplot ライブラリ（作図ライブラリ）をインポート
 import xarray as xr
-import datetime
+import datetime # datetime ライブラリ（日付処理ライブラリ）をインポート
 
 # 地図描画のため
+# cartpy 地図作図用ライブラリ
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
+from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
 import matplotlib.ticker as mticker
 import matplotlib.style as mplstyle
-from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
 
 # 座標の定義（fortran形式の場合）
+# meshgrid 関数で x(i), y(j) から X(i,j),Y(i,j) を作成
 X,Y = np.meshgrid(lon, lat, indexing = 'ij')  # indexing = 'ij' is F style
 
 # set contour interval
+# arange関数（[0,1,2,... 引数-1] の配列を作成する関数）を用いて等値線の値を決定
 tlev=np.arange(21)*2.-2.
 slev=np.arange(21)*0.5+30.
 
 # set depth level
 k=0
 
+# 作図環境 fig を作成
+# fig に２つ（figa,figb）の作図領域（axis）を作成
+# fig の横幅は 8、縦幅は 6、行数は 1、列数は 2、投影図法は正距円筒図法、中心の経度は 210 度
 fig, (figa, figb) = plt.subplots(figsize=(8,6),ncols=1,nrows=2,subplot_kw=dict(projection=ccrs.PlateCarree(central_longitude=210)))
 
+# 図中の格子線を gl という名のオブジェクトとして、格子線のパラメター値を定める
 gl = figa.gridlines(crs=ccrs.PlateCarree())
 gl.xlocator = mticker.FixedLocator(np.arange(-180,180.1,30))
 gl.ylocator = mticker.FixedLocator(np.arange(-75,75.1,15))
 
+# k 番目の圧力における水温（水平２次元）データを data という名の配列として複写
 data=np.copy(toi[:,:,k])
 #data=np.copy(toi[:,:,:].sel(PRES=5)) # xarray の sel 関数を使うことも可能
+
+# figa に 塗りつぶし等値線（contourf）を描画。cf という名で保存。
+# 座標は X,Y、データは data、投影は正距円筒図法、色は jet 、等値線値は tlev
 cf=figa.contourf(X,Y,data, transform=ccrs.PlateCarree(),cmap='jet',levels=tlev)
+# cf にカラーバーをつける（見やすさのため大きさを 0.8 倍にしておく。ラベルもつけておく）
 cbar=fig.colorbar(cf,ax=figa,shrink=0.8)
 cbar.set_label('temp [C]')
+# cf に等値線も描画する。線の色を白（9）、線幅を 0.5、最初から最後まで二つおき[::2]に数値も記入（実数、小数点以下２桁）
 cs = figa.contour(cf, transform=ccrs.PlateCarree(), colors = 'w', linewidths = 0.5)
 cs.clabel(cs.levels[::2],fmt='%1.2f')
 cbar.add_lines(cs)
 
+# 海岸線を描画
 figa.coastlines(linewidth=3)
+# 図のタイトルを描画
 figa.set_title('Temperature at {:5} m depth,  ('.format(prs[k])+str(date.astype('U16').values)+')')
 
+# おまじない
 figa.set_global()
 
 data=np.copy(soi[:,:,k])
@@ -180,13 +196,15 @@ figb.set_title('Salinity at {:5} m depth,  ('.format(prs[k])+str(date.astype('U1
 
 figb.set_global()
 
+# fig 全体のレイアウトを詰める
 fig.tight_layout()
 
+# 画面に描画
 fig.show()
 # plt.show() # ipython ではなく python で実行するときはこちらを選択
 ```
 
-<img src="https://github.com/kugi-yosikawa/DD2025/blob/main/2024_01_15.jpg">
+<img src="https://github.com/kugi-yosikawa/DD2026/blob/main/2024_01_15.jpg">
 
 
 ### 作成した図のファイル保存
