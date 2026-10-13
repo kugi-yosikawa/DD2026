@@ -178,7 +178,7 @@ cbar.add_lines(cs)
 # 海岸線を描画
 figa.coastlines(linewidth=3)
 # 図のタイトルを描画
-figa.set_title('Temperature at {:5} m depth,  ('.format(prs[k])+str(date.astype('U16').values)+')')
+figa.set_title('Temperature at {:5} m depth,  ('.format(prs[k])+str(date.astype('U16').values).strip+')')
 
 # おまじない
 figa.set_global()
@@ -188,11 +188,11 @@ cf=figb.contourf(X,Y,data, transform=ccrs.PlateCarree(),cmap='jet',levels=slev)
 cbar=fig.colorbar(cf,ax=figb,shrink=0.8)
 cbar.set_label('salt')
 cs = figb.contour(cf, transform=ccrs.PlateCarree(), colors = 'w', linewidths = 0.5)
-cs.clabel(cs.levels[::2],fmt='%1.2f')
+cs.clabel(cs.levels[::2],fmt='{:.2f}')
 cbar.add_lines(cs)
 
 figb.coastlines(linewidth=3)
-figb.set_title('Salinity at {:5} m depth,  ('.format(prs[k])+str(date.astype('U16').values)+')')
+figb.set_title('Salinity at {:5} m depth,  ('.format(prs[k])+str(date.astype('U16').values).strip()+')')
 
 figb.set_global()
 
