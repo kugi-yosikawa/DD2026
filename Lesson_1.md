@@ -105,11 +105,11 @@ nc = xr.open_dataset(file) # file を nc という名のオブジェクトとし
 
 date = nc['CDATE0'] # nc の CDARE0 とラベルづけされたデータ（解析日時を記した文字）を date という名の変数として保存
 dtyp = nc['DATASET_TYPE'] # nc の DATASET_TYPE とラベルづけされたデータ（モード種別）を dtyp とい名の変数として保存
-lat = nc['LATITUDE'][:] # nc の LATITUDE とラベルづけされたデータ（緯度配列）を lat とい名の変数として保存
-lon = nc['LONGITUDE'][:] # nc の LONGITUDE とラベルづけされたデータ（経度配列）を lon とい名の変数として保存
-prs = nc['PRES'][:] # nc の PRES とラベルづけされたデータ（圧力）を prs という名の変数として保存
-toi = nc['TOI'][:] # nc の TOI とラベルづけされたデータ（水温）を toi という名の変数として保存
-soi = nc['SOI'][:] # nc の SOI とラベルづけされたデータ（塩分）を soi という名の変数として保存
+lat = nc['LATITUDE'] # nc の LATITUDE とラベルづけされたデータ（緯度配列）を lat とい名の変数として保存
+lon = nc['LONGITUDE'] # nc の LONGITUDE とラベルづけされたデータ（経度配列）を lon とい名の変数として保存
+prs = nc['PRES'] # nc の PRES とラベルづけされたデータ（圧力）を prs という名の変数として保存
+toi = nc['TOI'] # nc の TOI とラベルづけされたデータ（水温）を toi という名の変数として保存
+soi = nc['SOI'] # nc の SOI とラベルづけされたデータ（塩分）を soi という名の変数として保存
 nc.close() # nc オブジェクトを閉じる
 ```
 
@@ -156,7 +156,7 @@ k=0
 fig, (figa, figb) = plt.subplots(figsize=(8,6),ncols=1,nrows=2,subplot_kw=dict(projection=ccrs.PlateCarree(central_longitude=210)))
 
 # 図中の格子線を gl という名のオブジェクトとして、格子線のパラメター値を定める
-gl = figa.gridlines(crs=ccrs.PlateCarree())
+gl = figa.gridlines(ccrs.PlateCarree())
 gl.xlocator = mticker.FixedLocator(np.arange(-180,180.1,30))
 gl.ylocator = mticker.FixedLocator(np.arange(-75,75.1,15))
 
@@ -170,9 +170,9 @@ cf=figa.contourf(X,Y,data, transform=ccrs.PlateCarree(),cmap='jet',levels=tlev)
 # cf にカラーバーをつける（見やすさのため大きさを 0.8 倍にしておく。ラベルもつけておく）
 cbar=fig.colorbar(cf,ax=figa,shrink=0.8)
 cbar.set_label('temp [C]')
-# cf に等値線も描画する。線の色を白（9）、線幅を 0.5、最初から最後まで二つおき[::2]に数値も記入（実数、小数点以下２桁）
+# cf に等値線も描画する。線の色を白（w）、線幅を 0.5、最初から最後まで二つおき[::2]に数値も記入（実数、小数点以下２桁）
 cs = figa.contour(cf, transform=ccrs.PlateCarree(), colors = 'w', linewidths = 0.5)
-cs.clabel(cs.levels[::2],fmt='%1.2f')
+cs.clabel(cs.levels[::2],fmt='{:.2f}')
 cbar.add_lines(cs)
 
 # 海岸線を描画
