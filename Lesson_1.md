@@ -93,14 +93,14 @@ variables:
   float S_STDEV：塩分の格子内観測値の標準偏差  
   float T_STDEV：水温の格子内観測値の標準偏差
 
-python で読み込むには以下のようにすれば良い（１例）
+python で読み込むには以下のようにすれば良い（例）
 
 ```
-import numpy as np # numpy ライブラリ（数値演算ライブラリ）をインポート
-import xarray as xr # xarray ライブラリ（配列処理ライブラリ）をインポート
+import numpy as np # numpy ライブラリ（数値演算ライブラリ）を np という略名でインポート
+import xarray as xr # xarray ライブラリ（配列処理ライブラリ）を xr という略名でインポート
 
 # read MOAA GPV data
-file='MOAAv2_OI_TS_20240115_MON_100deg_5-2000db.nc'
+file='MOAAv2_OI_TS_20240115_MON_100deg_5-2000db.nc' # ディレクトリ名は各自の環境に合わせて変更
 nc = xr.open_dataset(file) # file を nc という名のオブジェクトとして保存
 
 date = nc['CDATE0'] # nc の CDARE0 とラベルづけされたデータ（解析日時を記した文字）を date という名の変数として保存
@@ -125,13 +125,11 @@ soi = soi.T
 例えば最浅層の水温を描画するには以下のようにすれば良い（例）。
 
 ```
-import numpy as np
-import matplotlib.pyplot as plt # matplotlib.pyplot ライブラリ（作図ライブラリ）をインポート
-import xarray as xr
-import datetime # datetime ライブラリ（日付処理ライブラリ）をインポート
+# matplotlib.pyplot ライブラリ（作図ライブラリ）を plt の略名でインポート
+import matplotlib.pyplot as plt
 
 # 地図描画のため
-# cartpy 地図作図用ライブラリ
+# cartpy 地図作図用ライブラリ　見栄えのためいろいろとインポートしておく
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
@@ -226,7 +224,7 @@ fig.savefig(filename)
 ### 読み込むデータの年月を自動で変える（ループさせる）
 
 ```
-import datetime
+import datetime # datetime ライブラリ（日付操作ライブラリ）をインポート
 from dateutil.relativedelta import relativedelta
 
 # （設定）
