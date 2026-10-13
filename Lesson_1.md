@@ -96,12 +96,12 @@ variables:
 python で読み込むには以下のようにすれば良い（１例）
 
 ```
-import numpy as np
-import xarray as xr
+import numpy as np # numpy ライブラリ（数値演算ライブラリ）をインポート
+import xarray as xr # xarray ライブラリ（配列処理ライブラリ）をインポート
 
 # read MOAA GPV data
 file='MOAAv2_OI_TS_20240115_MON_100deg_5-2000db.nc'
-nc = xr.open_dataset(file)
+nc = xr.open_dataset(file) # file を nc という名前で読み込む
 
 date = nc['CDATE0']
 dtyp = nc['DATASET_TYPE']
