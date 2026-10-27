@@ -176,7 +176,7 @@ cbar.add_lines(cs)
 # 海岸線を描画
 figa.coastlines(linewidth=3)
 # 図のタイトルを描画
-figa.set_title('Temperature at {:5} m depth,  ('.format(prs[k])+str(date.astype('U16').values).strip+')')
+figa.set_title('Temperature at {:5} m depth,  ('.format(prs[k])+str(date.astype('U16').values).strip()+')')
 
 # おまじない
 figa.set_global()
