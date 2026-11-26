@@ -75,13 +75,13 @@ r_{12} & \equiv \frac{c_{12}}{s_1s_2} \\
 
 分散は変動の強度指標、共分散は共変動の強度指標
 
-<img src="https://github.com/kugi-yosikawa/DD2025/blob/main/scatter.jpg">
+<img src="https://github.com/kugi-yosikawa/DD2026/blob/main/scatter.jpg">
 
 左から、正の共変関係のある、ほとんど共変関係の無い、負の共変関係のある、２つのデータの組。それぞれの分散値はグラフの上に記してある。
 
 ## 主成分分析：２地点データの場合の例
 
-<img src="https://github.com/kugi-yosikawa/DD2025/blob/main/obsdat_sct.png">
+<img src="https://github.com/kugi-yosikawa/DD2026/blob/main/obsdat_sct.png">
 
 例えば京都と東京の気温の時系列。横軸に京都の気温、縦軸に東京の気温を取ると、上の図のように（多分）なる。図からは、主要な特徴として
 
@@ -94,7 +94,7 @@ r_{12} & \equiv \frac{c_{12}}{s_1s_2} \\
 
 これを変動強度（分散）を用いて以下のように定量的に表現するのが主成分分析。
 
-<img src="https://github.com/kugi-yosikawa/DD2025/blob/main/PCA_image.png">
+<img src="https://github.com/kugi-yosikawa/DD2026/blob/main/PCA_image.png">
 
 + 時刻 $n$ での変動 $(x_{n1},x_{n2})$ を、主軸と副軸の成分を用いて、 $(y_{n1},y_{n2})$ で表現することを試みる。この際、時刻 $n$ での全変動強度を変えないように $y_{nl}$ を定義する。
 ```math
@@ -423,20 +423,20 @@ a^1_Ny^1_1 & a^1_Ny^1_2 & \cdots & a^1_Ny^1_L
 
 ## サンプル
 
-pythonの[サンプルコード](https://github.com/kugi-yosikawa/DD2025/blob/main/pca_onedim_sample.py) は２地点の時間変動データの主成分分析を行うコードを例とする。このコードでは、以下の動画のように２地点で変動するデータ（例えば京都と東京の気温のようなデータ、コードの中で適当に作成したデータ）を主成分分析する。
+pythonの[サンプルコード](https://github.com/kugi-yosikawa/DD2026/blob/main/pca_onedim_sample.py) は２地点の時間変動データの主成分分析を行うコードを例とする。このコードでは、以下の動画のように２地点で変動するデータ（例えば京都と東京の気温のようなデータ、コードの中で適当に作成したデータ）を主成分分析する。
 
-<img src="https://github.com/kugi-yosikawa/DD2025/blob/main/obsdat.gif">
+<img src="https://github.com/kugi-yosikawa/DD2026/blob/main/obsdat.gif">
 
 サンプルコードで出力される、観測データの時系列表示、散布図（＋主成分構造）表示、主成分振幅の時系列表示を以下に示す
 
-<img src="https://github.com/kugi-yosikawa/DD2025/blob/main/obsdat_timser.jpg">
+<img src="https://github.com/kugi-yosikawa/DD2026/blob/main/obsdat_timser.jpg">
 
 観測データの時系列（赤：地点１の時系列、青：地点２の時系列）
 
-<img src="https://github.com/kugi-yosikawa/DD2025/blob/main/obsdat_scattr.jpg">
+<img src="https://github.com/kugi-yosikawa/DD2026/blob/main/obsdat_scattr.jpg">
 
 観測データの散布図（横軸：地点１の観測値、縦軸：地点２の観測値）と主成分分析で得られた第一モード（赤線）と第２モード（青線）の構造関数
 
-<img src="https://github.com/kugi-yosikawa/DD2025/blob/main/scores_timser.jpg">
+<img src="https://github.com/kugi-yosikawa/DD2026/blob/main/scores_timser.jpg">
 
 第一モード振幅（赤線）と第２モード振幅（青線）の時系列
